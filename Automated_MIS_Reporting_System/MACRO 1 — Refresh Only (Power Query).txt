@@ -1,0 +1,24 @@
+MACRO 1 — Refresh Only (Power Query + Pivot + Model)
+
+Sub Refresh_All_Data()
+
+    On Error GoTo ErrHandler
+
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+
+    ThisWorkbook.RefreshAll
+    Application.CalculateUntilAsyncQueriesDone
+
+    Application.ScreenUpdating = True
+    Application.DisplayAlerts = True
+
+    MsgBox "All data and pivots refreshed successfully.", vbInformation
+    Exit Sub
+
+ErrHandler:
+    Application.ScreenUpdating = True
+    Application.DisplayAlerts = True
+    MsgBox "Refresh failed. Please check data connections.", vbCritical
+
+End Sub

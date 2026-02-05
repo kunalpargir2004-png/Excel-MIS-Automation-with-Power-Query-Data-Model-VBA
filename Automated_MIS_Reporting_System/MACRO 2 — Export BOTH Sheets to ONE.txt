@@ -1,0 +1,39 @@
+MACRO 2 — Export BOTH Sheets to ONE PDF (Popup Save Location)
+
+Sub Export_Pivot_And_Dashboard_To_PDF()
+
+    Dim FilePath As Variant
+    Dim SheetsToExport As Variant
+
+    On Error GoTo ErrHandler
+
+    SheetsToExport = Array("PIVOT_TABLE", "MIS_DASHBOARD")
+
+    FilePath = Application.GetSaveAsFilename( _
+        InitialFileName:="MIS_Report.pdf", _
+        FileFilter:="PDF Files (*.pdf), *.pdf", _
+        Title:="Select location to save MIS PDF")
+
+    If FilePath = False Then
+        MsgBox "PDF export cancelled by user.", vbExclamation
+        Exit Sub
+    End If
+
+    Sheets(SheetsToExport).Select
+    ActiveSheet.ExportAsFixedFormat _
+        Type:=xlTypePDF, _
+        Filename:=FilePath, _
+        Quality:=xlQualityStandard, _
+        IncludeDocProperties:=True, _
+        IgnorePrintAreas:=False, _
+        OpenAfterPublish:=True
+
+    Sheets("MIS_DASHBOARD").Select
+
+    MsgBox "PDF generated successfully.", vbInformation
+    Exit Sub
+
+ErrHandler:
+    MsgBox "PDF export failed. Check sheet names.", vbCritical
+
+End Sub
